@@ -1,10 +1,17 @@
 import './App.css';
-import Gestion from './Gestion';
+import './style/History.css'
+import History from './components/History'
+import Gestion from './components/Gestion';
 
 function App() {
 
   return (
-    <Gestion/>
+
+    <>
+    <div class="gradient-background">
+      <History />
+    </div>
+    </>
   );
 }
 

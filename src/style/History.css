@@ -1,0 +1,22 @@
+.history-category {
+    margin: 50px;
+    display: flex;
+    justify-content: center;
+    
+}
+
+.history-category button {
+    margin: 0 1rex;
+    font-size: 25px;
+    font-weight: 700;
+    width: 250px;
+    background: none;
+    border: none;
+    border-bottom-style: solid;
+}
+
+.articles-category {
+    display: flex;
+    justify-content: center;
+    margin: 50px;
+}

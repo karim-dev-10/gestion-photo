@@ -1,29 +1,29 @@
 import { useState } from "react"
 export default function Gestion() {
-    const [showPrestataires, setShowPrestataires] = useState(false)
-    function clickShowPrestataires() {
-        setShowPrestataires(true)
+    const [showProvider, setShowProvider] = useState(false)
+    function clickShowProvider() {
+        setShowProvider(true)
         setShowLieuxShooting(false)
         setShowDecors(false)
         setShowArticles(false)
     }
     const [showLieuxShooting, setShowLieuxShooting] = useState(false)
     function clickShowLieuxShooting() {
-        setShowPrestataires(false)
+        setShowProvider(false)
         setShowLieuxShooting(true)
         setShowDecors(false)
         setShowArticles(false)
     }
     const [showArticles, setShowArticles] = useState(false)
     function clickShowArticles() {
-        setShowPrestataires(false)
+        setShowProvider(false)
         setShowLieuxShooting(false)
         setShowDecors(false)
         setShowArticles(true)
     }
     const [showDecors, setShowDecors] = useState(false)
     function clickShowDecors() {
-        setShowPrestataires(false)
+        setShowProvider(false)
         setShowLieuxShooting(false)
         setShowDecors(true)
         setShowArticles(false)
@@ -40,12 +40,12 @@ export default function Gestion() {
     return(
         <>
             <div>
-                <button onClick={clickShowPrestataires}>Prestataire</button>
+                <button onClick={clickShowProvider}>Prestataire</button>
                 <button onClick={clickShowLieuxShooting}>Lieux de Shooting</button>
                 <button onClick={clickShowArticles}>Articles</button>
                 <button onClick={clickShowDecors}>Décors</button>
             </div>
-            {showPrestataires && (
+            {showProvider && (
                 <>
                 <Action/>
                 <button> Historique de travail</button>
