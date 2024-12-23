@@ -1,0 +1,5 @@
+Apprendre dans shooting et server les délires de routes pcq sans les trucs dans server.js shooting.jsx sa marche pas
+
+Refaire le planning
+
+Interface CRUD FONCTIONNE CORRECTEMENT
