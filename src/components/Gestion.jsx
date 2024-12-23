@@ -1,74 +1,73 @@
-import { useState } from "react"
-export default function Gestion() {
-    const [showProvider, setShowProvider] = useState(false)
-    function clickShowProvider() {
-        setShowProvider(true)
-        setShowLieuxShooting(false)
-        setShowDecors(false)
-        setShowArticles(false)
-    }
-    const [showLieuxShooting, setShowLieuxShooting] = useState(false)
-    function clickShowLieuxShooting() {
-        setShowProvider(false)
-        setShowLieuxShooting(true)
-        setShowDecors(false)
-        setShowArticles(false)
-    }
-    const [showArticles, setShowArticles] = useState(false)
-    function clickShowArticles() {
-        setShowProvider(false)
-        setShowLieuxShooting(false)
-        setShowDecors(false)
-        setShowArticles(true)
-    }
-    const [showDecors, setShowDecors] = useState(false)
-    function clickShowDecors() {
-        setShowProvider(false)
-        setShowLieuxShooting(false)
-        setShowDecors(true)
-        setShowArticles(false)
-    }
-    function Action() {
-        return(
-            <>
-                <button>Ajouter</button>
-                <button>Modifier</button>
-                <button>Supprimer</button>
-            </>
-        )
-    }
-    return(
+import { useState } from "react";
+import '../style/gestion.css'
+
+// Composant pour les boutons d'action
+function Action() {
+    return (
         <>
-            <div>
-                <button onClick={clickShowProvider}>Prestataire</button>
-                <button onClick={clickShowLieuxShooting}>Lieux de Shooting</button>
-                <button onClick={clickShowArticles}>Articles</button>
-                <button onClick={clickShowDecors}>Décors</button>
-            </div>
-            {showProvider && (
-                <>
-                <Action/>
-                <button> Historique de travail</button>
-                </>
-            )}
-            {showLieuxShooting && (
-                <>
-                <Action/>
-                <button> Calendrier des réservations</button>
-                </>
-            )}
-            {showArticles && (
-                <>
-                <Action/>
-                <button> État des articles</button>
-                </>
-            )}
-            {showDecors && (
-                <>
-                <Action/>
-                <button> Gestion des articles inclus</button>
-                </>
-            )}
+            <button>Ajouter</button>
+            <button>Modifier</button>
+            <button>Supprimer</button>
         </>
-)
+    );
+}
+
+export default function Gestion() {
+    const [activeSection, setActiveSection] = useState(null);
+
+    // Gestion des clics pour activer une section
+    function handleClick(section) {
+        setActiveSection(section);
+    }
+
+    return (
+        <>
+            {/* Boutons de navigation */}
+            <div className="button-navigation">
+                <button onClick={() => handleClick("prestataires")}>Prestataire</button>
+                <button onClick={() => handleClick("lieuxShooting")}>Lieux de Shooting</button>
+                <button onClick={() => handleClick("articles")}>Articles</button>
+                <button onClick={() => handleClick("decors")}>Décors</button>
+            </div>
+
+            <div className="button-action">
+            {/* Contenu dynamique selon la section active */}
+            {activeSection === "prestataires" && (
+                <>
+                    <Action />
+                    <button>Historique de travail</button>
+                </>
+            )}
+            {activeSection === "lieuxShooting" && (
+                <>
+                    <Action />
+                    <button>Calendrier des réservations</button>
+                </>
+            )}
+            {activeSection === "articles" && (
+                <>
+                    <Action />
+                    <button>État des articles</button>
+                    <div className="input-gestion-articles">
+                        <form action="http://localhost:3001/api/articles" method="POST">
+                            <input type="text" name="nom" placeholder="Nom" required/>
+                            <select name="statut_photographie" required>
+                                <option value="" disabled selected>Choissisez un statut</option>
+                                <option value="1">Photographié</option>
+                                <option value="0">Non photographié</option>
+                            </select>
+                            <button type="submit">Valider</button>
+                        </form>
+                    </div>
+                </>
+            )}
+            {activeSection === "decors" && (
+                <>
+                    <Action />
+                    <button>Gestion des articles inclus</button>
+                </>
+            )}
+            </div>
+        </>
+    );
 }
