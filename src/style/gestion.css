@@ -12,9 +12,65 @@
         }
 }
 
-.button-action {
-    margin-top: 50px;
+button {
+    font-size: 16px;
+    width: 200px;
+    height: 35px;
+    background-color: #fff;
+}
+
+.button-gestion {
+    display: block;  /* Utilisation de block pour occuper toute la largeur du conteneur parent */
+    margin: 0 auto; /* Centre le bouton horizontalement */
+    font-size: 16px;
+    width: 225px;
+    height: 35px;
+    background-color: #fff;
+}
+
+
+.gestion-li-map {
     display: flex;
-    justify-content: center;
-    gap: 40px;
+    position: relative;
+    font-size: 20px;
+    width: 600px;
+    height: 35px;
+    background-color: #ffffff;
+    padding: 5px 15px;
+    margin-top: 10px;
+    border-radius: 15px;
+    margin-left: auto; /* Centrage horizontal */
+    margin-right: auto; /* Centrage horizontal */
+    cursor: pointer;
+
+    span {
+        background-color: rgba(255, 255, 255, 0);
+        line-height: 35px;
+    }
+}
+
+.icon-button {
+    width: 50px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0);
+    line-height: 35px;
+}
+
+.test {
+    color: red;
+}
+
+.icon-button.delete{
+    position: absolute;
+    right: 5px;
+}
+
+.icon-button.edit{
+    position: absolute;
+    right: 55px;
+}
+
+.gestion-li-map:hover {
+    background-color: #949494;
+    transition: 0.3s;
 }

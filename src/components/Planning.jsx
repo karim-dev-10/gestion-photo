@@ -17,7 +17,7 @@ export default function PlanningShootings() {
     fetch("http://localhost:3001/api/shootings")
       .then((res) => res.json())
       .then((data) => {
-        console.log('data',data)
+        // console.log('data',data)
         setShootings(
           data.map((shooting) => ({
             id: shooting.id,
@@ -74,14 +74,14 @@ export default function PlanningShootings() {
   // Mise à jour d'un shooting
   const handleUpdateShooting = async (e) => {
     e.preventDefault();
-    console.log(selectedShooting)
+    console.log("la",selectedShooting.id_prestataire, selectedShooting.id_lieu, selectedShooting.date)
   
     const updatedShooting = {
       id: selectedShooting.id,
       article: selectedShooting.id_article, // Assurez-vous que selectedShooting.article contient l'ID correct
-      prestataire: selectedShooting.prestataire,
-      lieu: selectedShooting.lieu,
-      date: selectedShooting.date,
+      prestataire: selectedShooting.id_prestataire,
+      lieu: selectedShooting.id_lieu,
+      date_shooting: selectedShooting.date,
     };
     
   
@@ -144,7 +144,7 @@ export default function PlanningShootings() {
           <label>
             Prestataire:
             <select
-              value={selectedShooting.prestataire || ""}
+              value={selectedShooting.prestataire}
               onChange={(e) =>
                 setSelectedShooting({ ...selectedShooting, prestataire: e.target.value })
               }

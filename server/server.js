@@ -147,15 +147,16 @@ app.get('/api/shootings', (req, res) => {
 });
 
 app.put('/api/shootings/:id', (req, res) => {
+  console.log("req.body", req.body)
   const { id } = req.params;
-  const { date_shooting, id_lieu, id_articles, id_prestataire } = req.body;
+  const { date_shooting, lieu, article, prestataire } = req.body;
 
   // Vérification de l'existence des ID dans les tables
   const checkLieuQuery = 'SELECT * FROM lieu WHERE id_lieu = ?';
   const checkArticlesQuery = 'SELECT * FROM articles WHERE id_articles = ?';
   const checkPrestatairesQuery = 'SELECT * FROM prestataires WHERE id_prestataire = ?';
 
-  connection.query(checkLieuQuery, [id_lieu], (err, resultsLieu) => {
+  connection.query(checkLieuQuery, [lieu], (err, resultsLieu) => {
     if (err) {
       return res.status(500).json({ error: 'Erreur de vérification du lieu' });
     }
@@ -164,7 +165,7 @@ app.put('/api/shootings/:id', (req, res) => {
       return res.status(400).json({ error: 'ID Lieu non valide' });
     }
 
-    connection.query(checkArticlesQuery, [id_articles], (err, resultsArticles) => {
+    connection.query(checkArticlesQuery, [article], (err, resultsArticles) => {
       if (err) {
         return res.status(500).json({ error: 'Erreur de vérification des articles' });
       }
@@ -173,7 +174,7 @@ app.put('/api/shootings/:id', (req, res) => {
         return res.status(400).json({ error: 'ID Article non valide' });
       }
 
-      connection.query(checkPrestatairesQuery, [id_prestataire], (err, resultsPrestataires) => {
+      connection.query(checkPrestatairesQuery, [prestataire], (err, resultsPrestataires) => {
         if (err) {
           return res.status(500).json({ error: 'Erreur de vérification des prestataires' });
         }
@@ -189,9 +190,10 @@ app.put('/api/shootings/:id', (req, res) => {
           WHERE id_shooting = ?
         `;
 
+        console.log("query",query)
         connection.query(
           query,
-          [date_shooting, id_lieu, id_articles, id_prestataire, id],
+          [date_shooting, lieu, article, prestataire, id],
           (err, results) => {
             if (err) {
               return res.status(500).json({ error: 'Erreur serveur lors de la mise à jour' });

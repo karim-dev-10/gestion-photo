@@ -27,8 +27,9 @@ function App() {
   return (
     <div className="gradient-background">
       <Gestion />
+      {/* <Planning /> */}
       {/* Affiche Connexion si l'utilisateur n'est pas connecté */}
-      {!isLoggedIn && <Connexion onLogin={handleLogin} />}
+      {/* {!isLoggedIn && <Connexion onLogin={handleLogin} />} */}
       
       {/* Affiche Planning si l'utilisateur est connecté */}
       {/* <Gestion /> */}
@@ -36,7 +37,7 @@ function App() {
       <Menu activePlanning={handlePlanning} activeGestion={handleGestion} />
 )}
 
-      {isPlanning  && <Shooting />}
+      {isPlanning  && <Shooting /> && <Planning />}
       {isGestion && <Gestion />}
     </div>
   );
