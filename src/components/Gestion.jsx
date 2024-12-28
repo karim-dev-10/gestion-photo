@@ -81,6 +81,42 @@ export default function Gestion() {
         setActivePopUp(false)
     }
 
+    // Fonction de gestion de la soumission de modification de prestataire
+    function handleSubmitPrestataire(e) {
+        e.preventDefault();
+        setLoading(true);
+
+        // Prépare les données à envoyer
+        const updatedPrestataire = selectedPrestataire;
+
+        // Envoi de la requête PUT au serveur pour modifier le prestataire
+        fetch(`http://localhost:3001/api/prestataires/${selectedPrestataire.id_prestataire}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedPrestataire),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.message) {
+                    // Mise à jour réussie, fermer la popup
+                    alert(data.message);
+                    setActivePopUp(false);
+                    loadData('prestataires'); // Recharger les données pour afficher les changements
+                } else {
+                    // Affichage des erreurs
+                    alert('Erreur de mise à jour');
+                }
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error('Erreur:', error);
+                setLoading(false);
+                alert('Erreur serveur');
+            });
+    }
+
     return (
         <>
             {/* Boutons de navigation */}
@@ -173,12 +209,12 @@ export default function Gestion() {
 
             {activePopUP && openEdit === "prestataire" && (
                 <div>
-                    <h3>Modifier</h3>
 
                     <div className="overlay">
                         <div className="form-container">
-                            <form className="form-edit-gestion" action="">
-                                <button type="button" onClick={() => {handlePopUp()}}>❌</button>
+                            <form className="form-edit-gestion" onSubmit={handleSubmitPrestataire}>
+                                <h3>Modifier un prestataire</h3>
+                                <button type="button" className="button-close" onClick={() => { handlePopUp() }}>❌</button>
                                 <label>
                                     Prénom :
                                     <input type="text" value={selectedPrestataire.prenom} onChange={(e) => { setSelectedPrestataire({ ...selectedPrestataire, prenom: e.target.value }) }} />
@@ -200,7 +236,7 @@ export default function Gestion() {
                                 </label>
 
 
-                                <button>Valider</button>
+                                <button type="submit" className="button-valid-edit">Valider</button>
                             </form>
                         </div>
                     </div>
@@ -209,11 +245,11 @@ export default function Gestion() {
 
             {activePopUP && openEdit === "lieu" && (
                 <div>
-                    <h3>Modifier un lieu</h3>
                     <div className="overlay">
                         <div className="form-container">
-                            <form className="form-edit-gestion" action="">
-                                <button type="button" onClick={() => {handlePopUp()}}>❌</button>
+                            <form className="form-edit-gestion">
+                                <h3>Modifier un lieu</h3>
+                                <button type="button" className="button-close" onClick={() => { handlePopUp() }}>❌</button>
                                 <label>
                                     Adresse :
                                     <input type="text" value={selectedLieu.adresse} onChange={(e) => { setSelectedLieu({ ...selectedLieu, adresse: e.target.value }) }} />
@@ -223,6 +259,8 @@ export default function Gestion() {
                                     Code postal :
                                     <input type="text" value={selectedLieu.code_postal} onChange={(e) => { selectedLieu({ ...selectedLieu.code_postal, code_postal: e.target.value }) }} />
                                 </label>
+
+                                <button type="submit" className="button-valid-edit">Valider</button>
                             </form>
                         </div>
                     </div>
@@ -232,11 +270,11 @@ export default function Gestion() {
             {activePopUP && openEdit === "article" && (
 
                 <div>
-                    <h3> Modifier un article </h3>
                     <div className="overlay">
                         <div className="form-container">
                             <form className="form-edit-gestion" action="">
-                                <button type="button" onClick={() => {handlePopUp()}}>❌</button>
+                                <h3> Modifier un article </h3>
+                                <button type="button" className="button-close" onClick={() => { handlePopUp() }}>❌</button>
                                 <label>
                                     Nom :
                                     <input type="text" value={selectedArticle.nom} onChange={(e) => { setSelectedArticle({ ...selectedArticle, nom: e.target.value }) }} />
@@ -257,6 +295,8 @@ export default function Gestion() {
                                         <option value={0}>Non photographié</option>
                                     </select>
                                 </label>
+
+                                <button type="submit" className="button-valid-edit">Valider</button>
                             </form>
                         </div>
                     </div>

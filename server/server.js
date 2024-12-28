@@ -207,6 +207,35 @@ app.put('/api/shootings/:id', (req, res) => {
   });
 });
 
+// Route pour mettre à jour un prestataire
+app.put('/api/prestataires/:id', (req, res) => {
+  const { id } = req.params;
+  const { prenom, nom, email, numero_de_telephone } = req.body;
+
+  // Vérification des données
+  if (!prenom || !nom || !email || !numero_de_telephone) {
+    return res.status(400).json({ error: 'Tous les champs sont requis' });
+  }
+
+  const query = `
+    UPDATE prestataires
+    SET prenom = ?, nom = ?, email = ?, numero_de_telephone = ?
+    WHERE id_prestataire = ?
+  `;
+
+  connection.query(query, [prenom, nom, email, numero_de_telephone, id], (err, results) => {
+    if (err) {
+      console.error('Erreur de mise à jour du prestataire', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: 'Prestataire non trouvé' });
+    }
+
+    res.status(200).json({ message: 'Prestataire mis à jour avec succès' });
+  });
+});
 
 
 

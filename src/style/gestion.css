@@ -89,7 +89,7 @@
         height: 30px;
     }
 
-    button {
+    .button-valid-edit {
         width: 200px;
         height: 40px;
         font-size: 16px;
@@ -101,7 +101,7 @@
     top: 50%; /* Positionne à 50% de la hauteur de l'écran */
     left: 50%; /* Positionne à 50% de la largeur de l'écran */
     transform: translate(-50%, -50%); 
-    width: 700px;
+
     display: flex;
     justify-content: center;
 }
@@ -116,4 +116,18 @@
     justify-content: center; /* Centre horizontalement */
     align-items: center; /* Centre verticalement */
     z-index: 1000; /* Superpose l'overlay par-dessus tout */
+}
+
+.button-close {
+    position: absolute;
+    right: 15px;
+    font-size: 18px;
+    background-color: #cdcdcd;
+    border: 1px solid #949494;
+    border-radius: 5px;
+}
+
+.button-close:hover {
+    background-color: #b4b4b4;
+    transition: 0.2s;
 }
