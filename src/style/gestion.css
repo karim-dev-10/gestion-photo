@@ -12,13 +12,6 @@
         }
 }
 
-button {
-    font-size: 16px;
-    width: 200px;
-    height: 35px;
-    background-color: #fff;
-}
-
 .button-gestion {
     display: block;  /* Utilisation de block pour occuper toute la largeur du conteneur parent */
     margin: 0 auto; /* Centre le bouton horizontalement */
@@ -73,4 +66,54 @@ button {
 .gestion-li-map:hover {
     background-color: #949494;
     transition: 0.3s;
+}
+
+.form-edit-gestion label {
+    display: grid;
+    grid-template-columns: 150px 1fr; /* Largeur fixe pour les labels et flex pour les inputs */
+    align-items: center; /* Centrer verticalement */
+    gap: 1rem; /* Espace entre le label et l'input */
+}
+
+.form-edit-gestion {
+    gap: 1rem; /* Espacement entre les champs */
+    display: flex;
+    flex-direction: column; /* Empiler les labels */
+    align-items: center;
+    background-color: #fff;
+    border-radius: 25px;
+    padding: 25px;
+
+    input {
+        width: 400px;
+        height: 30px;
+    }
+
+    button {
+        width: 200px;
+        height: 40px;
+        font-size: 16px;
+    }
+}
+
+.form-container {
+    position: absolute;
+    top: 50%; /* Positionne à 50% de la hauteur de l'écran */
+    left: 50%; /* Positionne à 50% de la largeur de l'écran */
+    transform: translate(-50%, -50%); 
+    width: 700px;
+    display: flex;
+    justify-content: center;
+}
+.overlay {
+    position: fixed; /* Couvre tout l'écran */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Couleur semi-transparente */
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement */
+    z-index: 1000; /* Superpose l'overlay par-dessus tout */
 }

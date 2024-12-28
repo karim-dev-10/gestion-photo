@@ -4,9 +4,14 @@ import '../style/gestion.css'
 export default function Gestion() {
     const [activeSection, setActiveSection] = useState(null);
     const [prestataires, setPrestataires] = useState([]);
+    const [selectedPrestataire, setSelectedPrestataire] = useState([])
     const [lieux, setLieux] = useState([]);
+    const [selectedLieu, setSelectedLieu] = useState([])
     const [articles, setArticles] = useState([]);
+    const [selectedArticle, setSelectedArticle] = useState([])
     const [loading, setLoading] = useState(false);
+    const [openEdit, setOpenEdit] = useState(null)
+    const [activePopUP, setActivePopUp] = useState(false)
 
     // Fonction pour charger les données en fonction de la section sélectionnée
     const loadData = (section) => {
@@ -54,6 +59,28 @@ export default function Gestion() {
         loadData(section); // Charger les données quand une section est activée
     }
 
+    function handleEditPrestataire(prestataire) {
+        setSelectedPrestataire(prestataire)
+        setOpenEdit("prestataire")
+        setActivePopUp(true)
+    }
+
+    function handleEditLieu(lieu) {
+        setSelectedLieu(lieu)
+        setOpenEdit("lieu")
+        setActivePopUp(true)
+    }
+
+    function handleEditArticle(article) {
+        setSelectedArticle(article)
+        setOpenEdit("article")
+        setActivePopUp(true)
+    }
+
+    function handlePopUp() {
+        setActivePopUp(false)
+    }
+
     return (
         <>
             {/* Boutons de navigation */}
@@ -70,13 +97,13 @@ export default function Gestion() {
                     {loading ? (
                         <p>Chargement des prestataires...</p>
                     ) : (
-                        
+
                         <ul>
                             {prestataires.map((prestataire) => (
                                 <div className="gestion-li-map" key={prestataire.id_prestataire}>
-                                    <span>{prestataire.prenom} {prestataire.nom}</span>
+                                    <span>{prestataire.prenom} {prestataire.nom} | {prestataire.email} | 0{prestataire.numero_de_telephone} </span>
 
-                                    <button className="icon-button edit">
+                                    <button className="icon-button edit" onClick={() => { handleEditPrestataire(prestataire) }}>
                                         ✏️
                                     </button>
 
@@ -100,9 +127,9 @@ export default function Gestion() {
                         <ul>
                             {lieux.map((lieu) => (
                                 <div className="gestion-li-map" key={lieu.id_lieu}>
-                                   <span> {lieu.adresse} {lieu.code_postal} </span>
-                                     {/* Icône de modification (crayon) */}
-                                     <button className="icon-button edit">
+                                    <span> {lieu.adresse} {lieu.code_postal} </span>
+                                    {/* Icône de modification (crayon) */}
+                                    <button className="icon-button edit" onClick={() => { handleEditLieu(lieu) }}>
                                         ✏️
                                     </button>
 
@@ -129,7 +156,7 @@ export default function Gestion() {
                                     <span>{article.nom} - {article.statut_photographie ? 'Photographié' : 'Non photographié'}</span>
 
                                     {/* Icône de modification (crayon) */}
-                                    <button className="icon-button edit">
+                                    <button className="icon-button edit" onClick={() => { handleEditArticle(article) }}>
                                         ✏️
                                     </button>
 
@@ -141,18 +168,99 @@ export default function Gestion() {
                             ))}
                         </ul>
                     )}
-                    {/* <div className="input-gestion-articles">
-                            <form action="http://localhost:3001/api/articles" method="POST">
-                                <input type="text" name="nom" placeholder="Nom" required />
-                                <select name="statut_photographie" required>
-                                    <option value="" disabled selected>Choisissez un statut</option>
-                                    <option value="1">Photographié</option>
-                                    <option value="0">Non photographié</option>
-                                </select>
-                                <button type="submit">Valider</button>
-                            </form>
-                        </div> */}
                 </>
+            )}
+
+            {activePopUP && openEdit === "prestataire" && (
+                <div>
+                    <h3>Modifier</h3>
+
+                    <div className="overlay">
+                        <div className="form-container">
+                            <form className="form-edit-gestion" action="">
+                                <button type="button" onClick={() => {handlePopUp()}}>❌</button>
+                                <label>
+                                    Prénom :
+                                    <input type="text" value={selectedPrestataire.prenom} onChange={(e) => { setSelectedPrestataire({ ...selectedPrestataire, prenom: e.target.value }) }} />
+                                </label>
+
+                                <label>
+                                    Nom :
+                                    <input type="text" value={selectedPrestataire.nom} onChange={(e) => { setSelectedPrestataire({ ...selectedPrestataire, nom: e.target.value }) }} />
+                                </label>
+
+                                <label>
+                                    E-mail :
+                                    <input type="text" value={selectedPrestataire.email} onChange={(e) => { setSelectedPrestataire({ ...selectedPrestataire, email: e.target.value }) }} />
+                                </label>
+
+                                <label>
+                                    Numéro de téléphone :
+                                    <input type="text" value={selectedPrestataire.numero_de_telephone} onChange={(e) => { setSelectedPrestataire({ ...selectedPrestataire, numero_de_telephone: e.target.value }) }} />
+                                </label>
+
+
+                                <button>Valider</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {activePopUP && openEdit === "lieu" && (
+                <div>
+                    <h3>Modifier un lieu</h3>
+                    <div className="overlay">
+                        <div className="form-container">
+                            <form className="form-edit-gestion" action="">
+                                <button type="button" onClick={() => {handlePopUp()}}>❌</button>
+                                <label>
+                                    Adresse :
+                                    <input type="text" value={selectedLieu.adresse} onChange={(e) => { setSelectedLieu({ ...selectedLieu, adresse: e.target.value }) }} />
+                                </label>
+
+                                <label>
+                                    Code postal :
+                                    <input type="text" value={selectedLieu.code_postal} onChange={(e) => { selectedLieu({ ...selectedLieu.code_postal, code_postal: e.target.value }) }} />
+                                </label>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {activePopUP && openEdit === "article" && (
+
+                <div>
+                    <h3> Modifier un article </h3>
+                    <div className="overlay">
+                        <div className="form-container">
+                            <form className="form-edit-gestion" action="">
+                                <button type="button" onClick={() => {handlePopUp()}}>❌</button>
+                                <label>
+                                    Nom :
+                                    <input type="text" value={selectedArticle.nom} onChange={(e) => { setSelectedArticle({ ...selectedArticle, nom: e.target.value }) }} />
+                                </label>
+
+                                <label>
+                                    Photographié :
+                                    <select
+                                        value={selectedArticle.statut_photographie}
+                                        onChange={(e) =>
+                                            setSelectedArticle({
+                                                ...selectedArticle,
+                                                statut_photographie: parseInt(e.target.value, 10), // Convertir en entier
+                                            })
+                                        }
+                                    >
+                                        <option value={1}>Photographié</option>
+                                        <option value={0}>Non photographié</option>
+                                    </select>
+                                </label>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             )}
         </>
     );
