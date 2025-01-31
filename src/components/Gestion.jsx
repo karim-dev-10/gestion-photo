@@ -12,6 +12,132 @@ export default function Gestion() {
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(null)
     const [activePopUP, setActivePopUp] = useState(false)
+    const [openAdd, setOpenAdd] = useState(null);  // Pour savoir quelle section afficher
+
+    function handleAddPrestataire() {
+        setOpenAdd("prestataire");
+    }
+
+    function handleAddLieu() {
+        setOpenAdd("lieu");
+    }
+
+    function handleAddArticle() {
+        setOpenAdd("article");
+    }
+
+    function handleCloseAdd() {
+        setOpenAdd(null);
+    }
+
+
+      // Formulaire d'ajout pour chaque section
+      function handleSubmitAddPrestataire(e) {
+        e.preventDefault();
+        setLoading(true);
+    
+        // Données du formulaire à envoyer
+        const newPrestataire = {
+            prenom: e.target[0].value,
+            nom: e.target[1].value,
+            email: e.target[2].value,
+            numero_de_telephone: e.target[3].value
+        };
+    
+        fetch('http://localhost:3001/api/prestataires', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newPrestataire),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    setOpenAdd(null); // Fermer le formulaire
+                    loadData("prestataires"); // Recharger les données
+                } else {
+                    alert('Erreur lors de l\'ajout');
+                }
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error('Erreur:', error);
+                setLoading(false);
+            });
+    }
+    
+
+    function handleSubmitAddLieu(e) {
+        e.preventDefault();
+        setLoading(true);
+    
+        // Données du formulaire à envoyer
+        const newLieu = {
+            adresse: e.target[0].value,
+            code_postal: e.target[1].value
+        };
+    
+        fetch('http://localhost:3001/api/lieu', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newLieu),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    setOpenAdd(null); // Fermer le formulaire
+                    loadData("lieuxShooting"); // Recharger les données
+                } else {
+                    alert('Erreur lors de l\'ajout');
+                }
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error('Erreur:', error);
+                setLoading(false);
+            });
+    }
+    
+
+    function handleSubmitAddArticle(e) {
+        e.preventDefault();
+        setLoading(true);
+    
+        // Données du formulaire à envoyer
+        const newArticle = {
+            nom: e.target[0].value,
+            statut_photographie: e.target[1].value
+        };
+    
+        fetch('http://localhost:3001/api/articles', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newArticle),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    setOpenAdd(null); // Fermer le formulaire
+                    loadData("articles"); // Recharger les données
+                } else {
+                    alert('Erreur lors de l\'ajout');
+                }
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error('Erreur:', error);
+                setLoading(false);
+            });
+    }
+    
 
     // Fonction pour charger les données en fonction de la section sélectionnée
     const loadData = (section) => {
@@ -117,6 +243,56 @@ export default function Gestion() {
             });
     }
 
+    function deletePrestataire(id) {
+        console.log("ID à supprimer :", id); // Vérification du log
+        fetch(`http://localhost:3001/api/prestataires/${id}`, { method: 'DELETE' })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.message) {
+                    alert(data.message);
+                    // Mise à jour de l'état sans rechargement complet
+                    setPrestataires((prev) => prev.filter((prestataire) => prestataire.id_prestataire !== id));
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch((err) => console.error('Erreur :', err));
+    }
+
+    function deleteLieu(id) {
+        console.log("ID à supprimer lieu :", id); // Vérification du log
+        fetch(`http://localhost:3001/api/lieu/${id}`, { method: 'DELETE' })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.message) {
+                    alert(data.message);
+                    // Mise à jour de l'état sans rechargement complet
+                    setLieux((prev) => prev.filter((lieu) => lieu.id_lieu !== id));
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch((err) => console.error('Erreur :', err));
+    }
+
+
+    function deleteArticle(id) {
+        console.log("ID à supprimer article :", id); // Vérification du log
+        fetch(`http://localhost:3001/api/articles/${id}`, { method: 'DELETE' })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.message) {
+                    alert(data.message);
+                    // Mise à jour de l'état sans rechargement complet
+                    setArticles((prev) => prev.filter((article) => article.id_articles !== id));
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch((err) => console.error('Erreur :', err));
+    }
+
+
     return (
         <>
             {/* Boutons de navigation */}
@@ -129,6 +305,7 @@ export default function Gestion() {
             {/* Contenu dynamique selon la section active */}
             {activeSection === "prestataires" && (
                 <>
+                    <button className="button-gestion" onClick={handleAddPrestataire}>Ajouter un Prestataire</button>
                     <button className="button-gestion">Historique de travail</button>
                     {loading ? (
                         <p>Chargement des prestataires...</p>
@@ -144,7 +321,7 @@ export default function Gestion() {
                                     </button>
 
                                     {/* Icône de suppression (croix rouge) */}
-                                    <button className="icon-button delete">
+                                    <button className="icon-button delete" onClick={() => deletePrestataire(prestataire.id_prestataire)}>
                                         ❌
                                     </button>
                                 </div>
@@ -156,6 +333,7 @@ export default function Gestion() {
 
             {activeSection === "lieuxShooting" && (
                 <>
+                <button className="button-gestion" onClick={handleAddLieu}>Ajouter un Lieu</button>
                     <button className="button-gestion">Calendrier des réservations</button>
                     {loading ? (
                         <p>Chargement des lieux...</p>
@@ -170,7 +348,7 @@ export default function Gestion() {
                                     </button>
 
                                     {/* Icône de suppression (croix rouge) */}
-                                    <button className="icon-button delete">
+                                    <button className="icon-button delete" onClick={() => deleteLieu(lieu.id_lieu)}>
                                         ❌
                                     </button>
                                 </div>
@@ -182,6 +360,7 @@ export default function Gestion() {
 
             {activeSection === "articles" && (
                 <>
+                <button className="button-gestion" onClick={handleAddArticle}>Ajouter un Article</button>
                     <button className="button-gestion">État des articles</button>
                     {loading ? (
                         <p>Chargement des articles...</p>
@@ -197,7 +376,7 @@ export default function Gestion() {
                                     </button>
 
                                     {/* Icône de suppression (croix rouge) */}
-                                    <button className="icon-button delete">
+                                    <button className="icon-button delete" onClick={() => deleteArticle(article.id_articles)}>
                                         ❌
                                     </button>
                                 </div>
@@ -302,6 +481,73 @@ export default function Gestion() {
                     </div>
                 </div>
             )}
+
+{openAdd === "prestataire" && (
+    <div className="form-container">
+        <button type="button" className="button-close" onClick={() => { setOpenAdd(null) }}>❌</button>
+        <form  className="form-edit-gestion" onSubmit={handleSubmitAddPrestataire}>
+            <label>
+                Prénom :
+                <input type="text" required />
+            </label>
+            <label>
+                Nom :
+                <input type="text" required />
+            </label>
+            <label>
+                E-mail :
+                <input type="email" required />
+            </label>
+            <label>
+                Numéro de téléphone :
+                <input type="text" required />
+            </label>
+            <button type="submit">Ajouter</button>
+            <button type="button" onClick={handleCloseAdd}>Annuler</button>
+        </form>
+    </div>
+)}
+
+{openAdd === "lieu" && (
+    <div className="form-container">
+        <button type="button" className="button-close" onClick={() => { setOpenAdd(null) }}>❌</button>
+        <form  className="form-edit-gestion" onSubmit={handleSubmitAddLieu}>
+            <label>
+                Adresse :
+                <input type="text" required />
+            </label>
+            <label>
+                Code Postal :
+                <input type="text" required />
+            </label>
+            <button type="submit">Ajouter</button>
+            <button type="button" onClick={handleCloseAdd}>Annuler</button>
+        </form>
+    </div>
+)}
+
+{openAdd === "article" && (
+    <div>
+         <button type="button" className="button-close" onClick={() => { setOpenAdd(null) }}>❌</button>
+        <form  className="form-edit-gestion" onSubmit={handleSubmitAddArticle}>
+            <label>
+                Nom :
+                <input type="text" required />
+            </label>
+            <label>
+                Statut :
+                <select required>
+                    <option value="1">Photographié</option>
+                    <option value="0">Non photographié</option>
+                </select>
+            </label>
+            <button type="submit">Ajouter</button>
+            <button type="button" onClick={handleCloseAdd}>Annuler</button>
+        </form>
+    </div>
+)}
+
+
         </>
     );
 }

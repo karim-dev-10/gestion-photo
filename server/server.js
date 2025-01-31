@@ -237,6 +237,117 @@ app.put('/api/prestataires/:id', (req, res) => {
   });
 });
 
+app.delete('/api/prestataires/:id', (req, res) => {
+  const { id } = req.params;
+
+  const query = 'DELETE FROM prestataires WHERE id_prestataire = ?';
+  connection.query(query, [id], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la suppression de l\'Prestataires', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: 'Prestataires non trouvé' });
+    }
+
+    res.status(200).json({ message: 'Prestataires supprimé avec succès' });
+  });
+});
+
+// Route pour supprimer un lieu
+app.delete('/api/lieu/:id', (req, res) => {
+  const { id } = req.params;
+
+  const query = 'DELETE FROM lieu WHERE id_lieu = ?';
+  connection.query(query, [id], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la suppression du lieu', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: 'Lieu non trouvé' });
+    }
+
+    res.status(200).json({ message: 'Lieu supprimé avec succès' });
+  });
+});
+
+
+// Route pour supprimer un article
+app.delete('/api/articles/:id', (req, res) => {
+  const { id } = req.params;
+
+  const query = 'DELETE FROM articles WHERE id_articles = ?';
+  connection.query(query, [id], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la suppression de l\'article', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: 'Article non trouvé' });
+    }
+
+    res.status(200).json({ message: 'Article supprimé avec succès' });
+  });
+});
+
+app.post('/api/articles', (req, res) => {
+  const { nom, statut_photographie } = req.body;
+
+  if (!nom || statut_photographie === undefined) {
+    return res.status(400).json({ error: 'Nom et statut_photographie sont requis' });
+  }
+
+  const query = 'INSERT INTO articles (nom, statut_photographie) VALUES (?, ?)';
+  connection.query(query, [nom, statut_photographie], (err, results) => {
+    if (err) {
+      console.error('Erreur serveur lors de l\'ajout de l\'article', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    res.status(201).json({ message: 'Article ajouté avec succès', id: results.insertId });
+  });
+});
+
+app.post('/api/prestataires', (req, res) => {
+  const { prenom, nom, email, numero_de_telephone } = req.body;
+
+  if (!prenom || !nom || !email || !numero_de_telephone) {
+    return res.status(400).json({ error: 'Tous les champs sont requis' });
+  }
+
+  const query = 'INSERT INTO prestataires (prenom, nom, email, numero_de_telephone) VALUES (?, ?, ?, ?)';
+  connection.query(query, [prenom, nom, email, numero_de_telephone], (err, results) => {
+    if (err) {
+      console.error('Erreur serveur lors de l\'ajout du prestataire', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    res.status(201).json({ message: 'Prestataire ajouté avec succès', id: results.insertId });
+  });
+});
+
+app.post('/api/lieu', (req, res) => {
+  const { adresse, code_postal } = req.body;
+
+  if (!adresse || !code_postal) {
+    return res.status(400).json({ error: 'Adresse et code_postal sont requis' });
+  }
+
+  const query = 'INSERT INTO lieu (adresse, code_postal) VALUES (?, ?)';
+  connection.query(query, [adresse, code_postal], (err, results) => {
+    if (err) {
+      console.error('Erreur serveur lors de l\'ajout du lieu', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    res.status(201).json({ message: 'Lieu ajouté avec succès', id: results.insertId });
+  });
+});
+
 
 
 // Pour gérer les données envoyées par le formulaire (content-type: application/x-www-form-urlencoded)

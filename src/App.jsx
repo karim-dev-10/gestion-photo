@@ -26,7 +26,7 @@ function App() {
 
   return (
     <div className="gradient-background">
-      <Gestion />
+      <Planning />
       {/* <Planning /> */}
       {/* Affiche Connexion si l'utilisateur n'est pas connecté */}
       {/* {!isLoggedIn && <Connexion onLogin={handleLogin} />} */}
