@@ -25,20 +25,46 @@ function App() {
   }
 
   return (
+    <>
+    <div class="background">
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+
     <div className="gradient-background">
+      {/* <Connexion/> */}
       <Gestion />
       {/* Affiche Connexion si l'utilisateur n'est pas connecté */}
-      {!isLoggedIn && <Connexion onLogin={handleLogin} />}
+      {/* {!isLoggedIn && <Connexion onLogin={handleLogin} />} */}
       
       {/* Affiche Planning si l'utilisateur est connecté */}
       {/* <Gestion /> */}
-      {isLoggedIn && !isPlanning && !isGestion && (
+      {/* {isLoggedIn && !isPlanning && !isGestion && (
       <Menu activePlanning={handlePlanning} activeGestion={handleGestion} />
 )}
 
-      {isPlanning  && <Shooting />}
-      {isGestion && <Gestion />}
+      {isPlanning  && <Shooting />} */}
+      {/* {isGestion && <Gestion />} */}
     </div>
+    </div>
+    </>
   );
 }
 

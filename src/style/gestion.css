@@ -1,14 +1,17 @@
 
 .button-navigation {
+    margin-top: 50px;
     display: flex;
     justify-content: center;
-    gap: 40px;
+    gap: 150px;
     
     button {
-            width: 250px;
-            height: 50px;
-            background-color: #fff;
-            font-size: 16px;
+            color: #fff;
+            border: none;
+            border-bottom: 2px solid #ac00d6;
+            width: 10%;
+            font-size: 30px;
+            background-color: transparent;
         }
 }
 
@@ -17,4 +20,13 @@
     display: flex;
     justify-content: center;
     gap: 40px;
+
+    button {
+            background-color: rgba(0, 0, 0, 0.55);
+            color: #fff;          
+            border: 2px solid #ac00d6;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 20px;
+    }
 }

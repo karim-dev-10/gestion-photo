@@ -25,7 +25,7 @@ export default function Gestion() {
             {/* Boutons de navigation */}
             <div className="button-navigation">
                 <button onClick={() => handleClick("prestataires")}>Prestataire</button>
-                <button onClick={() => handleClick("lieuxShooting")}>Lieux de Shooting</button>
+                <button onClick={() => handleClick("lieuxShooting")}>Lieux</button>
                 <button onClick={() => handleClick("articles")}>Articles</button>
                 <button onClick={() => handleClick("decors")}>Décors</button>
             </div>
@@ -35,7 +35,7 @@ export default function Gestion() {
             {activeSection === "prestataires" && (
                 <>
                     <Action />
-                    <button>Historique de travail</button>
+                    <button>Historique</button>
                 </>
             )}
             {activeSection === "lieuxShooting" && (
