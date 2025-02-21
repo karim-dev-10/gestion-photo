@@ -5,6 +5,7 @@ import Menu from './components/Menu';
 import Planning from './components/Planning'
 import { useState } from 'react';
 import Gestion from './components/Gestion';
+import Prestataire from './components/Prestataires';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // État pour suivre si l'utilisateur est connecté

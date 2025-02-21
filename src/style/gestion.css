@@ -1,32 +1,55 @@
-
 .button-navigation {
-    margin-top: 50px;
+    background-color: #190047;
+    padding: 20px;
     display: flex;
     justify-content: center;
-    gap: 150px;
+    gap: 50px;
+
+    .select-black {
+        border-bottom: 2px solid #00ec66;
+        transition: 0.8s;
+    }
     
     button {
             color: #fff;
+            font-weight: 700;
             border: none;
-            border-bottom: 2px solid #ac00d6;
-            width: 10%;
-            font-size: 30px;
+            border-bottom: 2px solid #ffffff;
+            padding: 5px 15px;
+            font-size: 20px;
             background-color: transparent;
+            cursor: pointer;
         }
 }
 
 .button-action {
     margin-top: 50px;
+    gap: 40px;
     display: flex;
     justify-content: center;
-    gap: 40px;
+    flex-direction: column;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        width: 800px;
+        font-size: 20px;
+    }
 
     button {
-            background-color: rgba(0, 0, 0, 0.55);
-            color: #fff;          
-            border: 2px solid #ac00d6;
+            color: #121212;          
+            border: 2px solid #4400d6;
             border-radius: 5px;
             padding: 10px;
             font-size: 20px;
+    }
+}
+
+.button-option {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    button{
+        font-size: 16px;
     }
 }

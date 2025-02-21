@@ -205,7 +205,261 @@ app.put('/api/shootings/:id', (req, res) => {
   });
 });
 
+app.post('/api/prestataires', (req, res) => {
+  const { prenom, nom, email, numero_de_telephone } = req.body;
 
+  if (!prenom || !nom || !email || !numero_de_telephone) {
+    return res.status(400).json({ error: 'Tous les champs sont requis' });
+  }
+
+  const query = `INSERT INTO prestataires (prenom, nom, email, numero_de_telephone) VALUES (?, ?, ?, ?)`;
+
+  connection.query(query, [prenom, nom, email, numero_de_telephone], (err, results) => {
+    if (err) {
+      console.error('Erreur SQL:', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    res.status(201).json({ message: 'Prestataire ajouté avec succès', id: results.insertId });
+  });
+});
+
+app.get('/api/prestataires', (req, res) => {
+  const { prenom, nom } = req.query;
+
+  const query = 'SELECT * FROM prestataires WHERE prenom = ? AND nom = ?';
+  connection.query(query, [prenom, nom], (err, results) => {
+    if (err) {
+      console.error('Erreur SQL:', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    res.json(results);
+  });
+});
+
+app.put('/api/prestataires/:id', (req, res) => {
+  const { id } = req.params;
+  const { prenom, nom, email, numero_de_telephone } = req.body;
+
+  if (!prenom || !nom || !email || !numero_de_telephone) {
+    return res.status(400).json({ error: 'Tous les champs sont requis' });
+  }
+
+  const query = 'UPDATE prestataires SET prenom = ?, nom = ?, email = ?, numero_de_telephone = ? WHERE id_prestataire = ?';
+  connection.query(query, [prenom, nom, email, numero_de_telephone, id], (err, results) => {
+    if (err) {
+      console.error('Erreur SQL:', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    res.json({ message: 'Prestataire mis à jour avec succès' });
+  });
+});
+
+app.delete('/api/prestataires/:id', (req, res) => {
+  const { id } = req.params;
+
+  const query = 'DELETE FROM prestataires WHERE id_prestataire = ?';
+
+  connection.query(query, [id], (err, results) => {
+    if (err) {
+      console.error('Erreur SQL:', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: 'Prestataire non trouvé' });
+    }
+
+    res.json({ message: 'Prestataire supprimé avec succès' });
+  });
+});
+
+app.post('/api/lieu', (req, res) => {
+  const { adresse, code_postal, nom } = req.body;
+
+  if (!adresse || !code_postal || !nom) {
+    return res.status(400).json({ error: 'Tous les champs sont requis' });
+  }
+
+  const query = 'INSERT INTO lieu (adresse, code_postal, nom) VALUES (?, ?, ?)';
+  connection.query(query, [adresse, code_postal, nom], (err, results) => {
+    if (err) {
+      console.error('Erreur SQL:', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    res.status(201).json({ message: 'Lieu ajouté avec succès', id: results.insertId });
+  });
+});
+
+app.get('/api/lieu', (req, res) => {
+  const { nom, code_postal } = req.query;  // Recherche par nom ou code postal
+
+  let query = 'SELECT * FROM lieu WHERE 1=1'; // Commence avec une requête qui retourne tous les lieux
+  let queryParams = [];
+
+  if (nom) {
+    query += ' AND nom LIKE ?';
+    queryParams.push(`%${nom}%`);
+  }
+
+  if (code_postal) {
+    query += ' AND code_postal LIKE ?';
+    queryParams.push(`%${code_postal}%`);
+  }
+
+  connection.query(query, queryParams, (err, results) => {
+    if (err) {
+      console.error('Erreur SQL:', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    res.json(results);
+  });
+});
+
+app.put('/api/lieu/:id', (req, res) => {
+  const { id } = req.params;
+  const { adresse, code_postal, nom } = req.body;
+
+  if (!adresse || !code_postal || !nom) {
+    return res.status(400).json({ error: 'Tous les champs sont requis pour la modification' });
+  }
+
+  const query = 'UPDATE lieu SET adresse = ?, code_postal = ?, nom = ? WHERE id_lieu = ?';
+  connection.query(query, [adresse, code_postal, nom, id], (err, results) => {
+    if (err) {
+      console.error('Erreur SQL:', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    res.json({ message: 'Lieu mis à jour avec succès' });
+  });
+});
+
+app.delete('/api/lieu/:id', (req, res) => {
+  const { id } = req.params;
+
+  const query = 'DELETE FROM lieu WHERE id_lieu = ?';
+  connection.query(query, [id], (err, results) => {
+    if (err) {
+      console.error('Erreur SQL:', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: 'Lieu non trouvé' });
+    }
+
+    res.json({ message: 'Lieu supprimé avec succès' });
+  });
+});
+
+//ARTICLE
+// Route pour obtenir les articles avec un filtre optionnel sur le statut_photographie
+app.get('/api/articles', (req, res) => {
+  const { statut_photographie } = req.query;
+  let query = 'SELECT * FROM articles';
+  let queryParams = [];
+
+  // Si le statut_photographie est fourni, ajoute une condition WHERE
+  if (statut_photographie !== undefined) {
+    query += ' WHERE statut_photographie = ?';
+    queryParams.push(statut_photographie);
+  }
+
+  connection.query(query, queryParams, (err, results) => {
+    if (err) {
+      console.error('Erreur de requête SQL:', err);
+      return res.status(500).send('Erreur serveur.');
+    }
+    res.json(results);
+  });
+});
+
+//ARTICLE
+app.post('/api/articles', (req, res) => {
+  const { nom, statut_photographie } = req.body;
+
+  if (!nom || statut_photographie === undefined) {
+    return res.status(400).json({ error: 'Tous les champs sont requis' });
+  }
+
+  const query = 'INSERT INTO articles (nom, statut_photographie) VALUES (?, ?)';
+  connection.query(query, [nom, statut_photographie], (err, results) => {
+    if (err) {
+      console.error('Erreur SQL:', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    res.status(201).json({ message: 'Article ajouté avec succès', id: results.insertId });
+  });
+});
+
+app.get('/api/articles', (req, res) => {
+  const query = 'SELECT * FROM articles'; // On récupère tous les articles
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error('Erreur SQL:', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+    res.json(results);
+  });
+});
+
+app.put('/api/articles/:id', (req, res) => {
+  const { id } = req.params;
+  const { nom, statut_photographie } = req.body;
+
+  if (!nom || statut_photographie === undefined) {
+    return res.status(400).json({ error: 'Tous les champs sont requis pour la modification' });
+  }
+
+  const query = 'UPDATE articles SET nom = ?, statut_photographie = ? WHERE id_articles = ?';
+  connection.query(query, [nom, statut_photographie, id], (err, results) => {
+    if (err) {
+      console.error('Erreur SQL:', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    res.json({ message: 'Article mis à jour avec succès' });
+  });
+});
+
+app.delete('/api/articles/:id', (req, res) => {
+  const { id } = req.params;
+
+  // Vérifier si l'article est utilisé dans un shooting
+  const checkQuery = 'SELECT * FROM shootings WHERE id_articles = ?';
+  connection.query(checkQuery, [id], (err, results) => {
+    if (err) {
+      console.error('Erreur SQL:', err);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+
+    // Si l'article est trouvé dans un shooting, on empêche la suppression
+    if (results.length > 0) {
+      return res.status(400).json({ error: 'Vous ne pouvez pas supprimer un article qui est dans un shooting.' });
+    }
+
+    // Si l'article n'est pas utilisé, procéder à la suppression
+    const deleteQuery = 'DELETE FROM articles WHERE id_articles = ?';
+    connection.query(deleteQuery, [id], (err, results) => {
+      if (err) {
+        console.error('Erreur SQL:', err);
+        return res.status(500).json({ error: 'Erreur serveur' });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ error: 'Article non trouvé' });
+      }
+
+      res.json({ message: 'Article supprimé avec succès' });
+    });
+  });
+});
 
 
 // Pour gérer les données envoyées par le formulaire (content-type: application/x-www-form-urlencoded)
